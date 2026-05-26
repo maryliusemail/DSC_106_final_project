@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Steam Game Genre Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">DSC 106 Final Project</p>
+        <h1>Steam Game Genre Explorer</h1>
+        <p class="intro">
+          A first look at how Steam games differ across genre, price, rating, and playtime.
+        </p>
+      </div>
+      <a class="repo-link" href="https://github.com/maryliusemail/DSC_106_final_project" target="_blank" rel="noreferrer">
+        GitHub Repo
+      </a>
+    </header>
+
+    <main>
+      <section class="dashboard" aria-labelledby="viz-title">
+        <div class="controls" aria-label="Visualization controls">
+          <label for="genre-select">
+            Genre
+            <select id="genre-select">
+              <option value="all">All genres</option>
+            </select>
+          </label>
+
+          <fieldset>
+            <legend>Metric</legend>
+            <div class="segmented">
+              <button class="metric-button active" type="button" data-metric="count">Games</button>
+              <button class="metric-button" type="button" data-metric="rating">Rating</button>
+              <button class="metric-button" type="button" data-metric="playtime">Playtime</button>
+              <button class="metric-button" type="button" data-metric="price">Price</button>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="viz-grid">
+          <div class="chart-panel">
+            <div class="chart-heading">
+              <div>
+                <h2 id="viz-title">Genre Comparison</h2>
+                <p id="chart-subtitle">Top genres by number of games</p>
+              </div>
+              <output id="selection-output">All genres</output>
+            </div>
+            <div class="chart-wrap">
+              <svg id="genre-chart" role="img" aria-labelledby="viz-title chart-subtitle"></svg>
+              <div id="tooltip" class="tooltip" hidden></div>
+            </div>
+          </div>
+
+          <aside class="stats-panel" aria-label="Dataset summary">
+            <h2>Snapshot</h2>
+            <dl>
+              <div>
+                <dt>Games</dt>
+                <dd id="stat-games">-</dd>
+              </div>
+              <div>
+                <dt>Average Positive Rating</dt>
+                <dd id="stat-rating">-</dd>
+              </div>
+              <div>
+                <dt>Average Price</dt>
+                <dd id="stat-price">-</dd>
+              </div>
+              <div>
+                <dt>Average Playtime</dt>
+                <dd id="stat-playtime">-</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="writeup" aria-labelledby="writeup-title">
+        <h2 id="writeup-title">Prototype Writeup</h2>
+
+        <article>
+          <h3>What have I done so far?</h3>
+          <p>
+            I created an initial public-facing webpage for the Steam games project and connected it to the provided
+            Steam CSV dataset. The page loads the data, computes genre-level summaries, and displays an interactive
+            bar chart that can switch between game count, average rating, average playtime, and average price. I also
+            added a genre filter so a viewer can focus on a single first-listed genre and compare that subset against
+            the full dataset summary. The current prototype includes a GitHub repository link, a working visualization,
+            hover details, metric controls, and a written project description so it satisfies the core initial prototype
+            requirements.
+          </p>
+        </article>
+
+        <article>
+          <h3>What will be the most challenging part to design and why?</h3>
+          <p>
+            The hardest part will be designing a visualization that shows meaningful differences without letting the
+            largest genres overwhelm the smaller ones. Steam games can belong to multiple genres and tags, so choosing
+            whether to use first-listed genre, all listed genres, or SteamSpy tags will strongly affect the story the
+            visualization tells. It will also be challenging to balance several variables at once, because price,
+            positive rating, number of owners, and playtime all have skewed distributions with major outliers. The final
+            design will need careful interaction choices so users can explore the dataset freely while still understanding
+            the main takeaway quickly.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
