@@ -84,28 +84,24 @@
         <h2 id="writeup-title">Prototype Writeup</h2>
 
         <article>
-          <h3>What have I done so far?</h3>
+          <h3>What have we done so far?</h3>
           <p>
-            I created an initial public-facing webpage for the Steam games project and connected it to the provided
-            Steam CSV dataset. The page loads the data, computes genre-level summaries, and displays an interactive
-            bar chart that can switch between game count, average rating, average playtime, and average price. I also
-            added a genre filter so a viewer can focus on a single first-listed genre and compare that subset against
-            the full dataset summary. The current prototype includes a GitHub repository link, a working visualization,
-            hover details, metric controls, and a written project description so it satisfies the core initial prototype
-            requirements.
+            So far, we made a first version of the webpage and connected it to the Steam CSV data. The page reads the
+            dataset, groups the games by their first listed genre, and turns those groups into a bar chart. We added
+            buttons so people can switch between looking at game count, average rating, average playtime, and average
+            price. We also added a genre dropdown and hover details so the visualization feels more interactive instead
+            of just being a static chart.
           </p>
         </article>
 
         <article>
           <h3>What will be the most challenging part to design and why?</h3>
           <p>
-            The hardest part will be designing a visualization that shows meaningful differences without letting the
-            largest genres overwhelm the smaller ones. Steam games can belong to multiple genres and tags, so choosing
-            whether to use first-listed genre, all listed genres, or SteamSpy tags will strongly affect the story the
-            visualization tells. It will also be challenging to balance several variables at once, because price,
-            positive rating, number of owners, and playtime all have skewed distributions with major outliers. The final
-            design will need careful interaction choices so users can explore the dataset freely while still understanding
-            the main takeaway quickly.
+            The hardest part will probably be deciding what story the final visualization should focus on. The Steam
+            data has a lot of possible angles, like genre, price, ratings, owners, and playtime, so it is easy for the
+            page to get too crowded. Genres are also a little messy because each game can have multiple genres and tags,
+            which means the grouping method can change what the chart seems to say. We think the main design challenge
+            will be making the page easy to explore while still giving viewers a clear takeaway right away.
           </p>
         </article>
       </section>
