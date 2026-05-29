@@ -95,30 +95,14 @@
         </div>
       </section>
 
-      <section class="writeup" aria-labelledby="writeup-title">
-        <h2 id="writeup-title">Prototype Writeup</h2>
-
-        <article>
-          <h3>What have we done so far?</h3>
-          <p>
-            So far, we made a first version of the webpage and connected it to the Steam CSV data. The page reads the
-            dataset, groups the games by their first listed genre, and turns those groups into a bar chart. We added
-            buttons so people can switch between looking at game count, average rating, average playtime, and average
-            price. We also added a genre dropdown and hover details so the visualization feels more interactive instead
-            of just being a static chart.
-          </p>
-        </article>
-
-        <article>
-          <h3>What will be the most challenging part to design and why?</h3>
-          <p>
-            The hardest part will probably be deciding what story the final visualization should focus on. The Steam
-            data has a lot of possible angles, like genre, price, ratings, owners, and playtime, so it is easy for the
-            page to get too crowded. Genres are also a little messy because each game can have multiple genres and tags,
-            which means the grouping method can change what the chart seems to say. We think the main design challenge
-            will be making the page easy to explore while still giving viewers a clear takeaway right away.
-          </p>
-        </article>
+      <section class="takeaway">
+        <h2 class="takeaway-heading">Takeaway</h2>
+        <div class="takeaway-body">
+          <p>The Steam library reveals behaviors about its audience and its catalog's performance. Action games dominate the catalog by a massive margin, making up nearly twice as many as the next closest genre. However, when you switch to 'view by ratings' they barely pass the top half of genres. The genres players enjoy the most are Software Training, Web Publishing, Design &amp; Illustration; niche categories with tiny download counts but satisfied audiences.</p>
+          <p>The Free to Play games reveal an interesting pattern. In a catalog, free sounds like an obvious value choice but Free to Play games rank last in player ratings. Players aren't indifferent to free games, they actively rate them worse than games in every other genre, including those that cost $10 or more.</p>
+          <p>Altogether, these three findings suggest that on Steam, popularity and price are poor measures of quality. Free games score the worst, the genre with the most titles doesn't top the ratings, and the highest-rated genres are ones most players have never downloaded.</p>
+          <p>Our visualization lets you explore these for yourself. Starting with the Games view, the Action genre seems to dominate, but clicking to Ratings flips that idea entirely. The top 6 / bottom 6 split makes the information easily visible and the average reference line gives every view a concrete benchmark to compare against.</p>
+        </div>
       </section>
     </main>
 

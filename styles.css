@@ -355,26 +355,30 @@ dd {
   font-weight: 820;
 }
 
-.writeup {
-  display: grid;
-  grid-template-columns: 0.7fr 1fr 1fr;
-  gap: 24px;
-  padding: 28px 0 44px;
+.takeaway {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 64px;
+  border-top: 1px solid var(--line);
 }
 
-.writeup article {
-  border-top: 4px solid var(--accent);
-  padding-top: 14px;
+.takeaway-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 20px;
 }
 
-.writeup h3 {
-  margin-bottom: 8px;
+.takeaway-body p {
   font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  max-width: 720px;
+  margin: 0 0 16px;
 }
 
-.writeup p {
+.takeaway-body p:last-child {
   margin-bottom: 0;
-  color: #3f464d;
 }
 
 @media (max-width: 860px) {
