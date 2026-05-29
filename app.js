@@ -76,6 +76,47 @@ genreSelect.addEventListener("change", () => {
   render();
 });
 
+document.querySelectorAll(".explore-pill").forEach((pill) => {
+  pill.addEventListener("click", () => {
+    const metric = pill.dataset.metric;
+    const genre = pill.dataset.genre;
+
+    state.metric = metric;
+    state.genre = genre;
+
+    genreSelect.value = genre;
+
+    document.querySelectorAll(".metric-button").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.metric === metric);
+    });
+
+    const filteredRows = genre === "all" ? state.rows : state.rows.filter((d) => d.genre === genre);
+    updateStats(filteredRows);
+    render();
+
+    document.querySelector(".explore-questions").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+document.querySelectorAll(".hook-question").forEach((question) => {
+  question.addEventListener("click", () => {
+    state.metric = question.dataset.metric;
+    if (question.dataset.genre === "all") {
+      state.genre = "all";
+      genreSelect.value = "all";
+    } else {
+      state.genre = question.dataset.genre;
+      genreSelect.value = question.dataset.genre;
+    }
+    document.querySelectorAll(".metric-button").forEach((btn) => btn.classList.remove("active"));
+    document.querySelector(`.metric-button[data-metric="${state.metric}"]`).classList.add("active");
+    const filteredRows = state.genre === "all" ? state.rows : state.rows.filter((d) => d.genre === state.genre);
+    updateStats(filteredRows);
+    render();
+    document.querySelector(".chart-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
 window.addEventListener("resize", () => render());
 
 function parseCsv(text) {
@@ -202,16 +243,20 @@ function render() {
 
   const metric = metricConfig[state.metric];
   const isSingleGenre = state.genre !== "all";
+  const sorted = state.summaries.slice().sort((a, b) => metric.value(b) - metric.value(a));
+  const top6 = sorted.slice(0, 6);
+  const bottom6 = sorted.slice(-6);
   const data = isSingleGenre
     ? state.summaries.filter((d) => d.genre === state.genre)
-    : state.summaries.slice().sort((a, b) => metric.value(b) - metric.value(a)).slice(0, 12);
+    : [...top6, { divider: true }, ...bottom6];
 
   subtitle.textContent = isSingleGenre ? `${metric.label} for ${state.genre}` : metric.subtitle;
   selectionOutput.textContent = isSingleGenre ? state.genre : "All genres";
-  drawBarChart(data, metric);
+  const globalMax = Math.max(...sorted.map(metric.value), 1);
+  drawBarChart(data, metric, globalMax);
 }
 
-function drawBarChart(data, metric) {
+function drawBarChart(data, metric, globalMax) {
   const width = chart.clientWidth || 800;
   const height = chart.clientHeight || 500;
   const margin = {
@@ -223,7 +268,7 @@ function drawBarChart(data, metric) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const rowHeight = innerHeight / Math.max(data.length, 1);
-  const maxValue = Math.max(...data.map(metric.value), 1);
+  const maxValue = globalMax;
 
   chart.setAttribute("viewBox", `0 0 ${width} ${height}`);
   chart.innerHTML = "";
@@ -247,7 +292,55 @@ function drawBarChart(data, metric) {
   });
   chart.append(gridGroup);
 
+  const avgValue = state.summaries.reduce((sum, d) => sum + metric.value(d), 0) / state.summaries.length;
+  const avgX = margin.left + (avgValue / maxValue) * innerWidth;
+  const avgGroup = createSvgElement("g", {});
+  avgGroup.append(createSvgElement("line", {
+    x1: avgX,
+    x2: avgX,
+    y1: margin.top,
+    y2: height - margin.bottom,
+    stroke: "var(--muted)",
+    "stroke-width": "1.5",
+    "stroke-dasharray": "4 3",
+    opacity: "0.7",
+  }));
+  avgGroup.append(createSvgElement("text", {
+    x: avgX,
+    y: margin.top - 6,
+    "text-anchor": "middle",
+    "font-size": "11",
+    fill: "var(--muted)",
+    "font-style": "italic",
+  }, `avg: ${metric.format(avgValue)}`));
+  chart.append(avgGroup);
+
+  const dividerIndex = data.findIndex((d) => d.divider);
+
   data.forEach((datum, index) => {
+    if (datum.divider) {
+      const divY = margin.top + index * rowHeight + rowHeight * 0.5;
+      chart.append(createSvgElement("line", {
+        x1: margin.left,
+        x2: margin.left + innerWidth,
+        y1: divY,
+        y2: divY,
+        stroke: "var(--line)",
+        "stroke-width": "1.5",
+        "stroke-dasharray": "4 3",
+      }));
+      chart.append(createSvgElement("text", {
+        x: margin.left + innerWidth / 2,
+        y: divY,
+        dy: "-6",
+        "text-anchor": "middle",
+        "font-size": "11",
+        fill: "var(--muted)",
+        "font-style": "italic",
+      }, "· · · bottom 6 · · ·"));
+      return;
+    }
+
     const y = margin.top + index * rowHeight + rowHeight * 0.18;
     const barHeight = Math.max(18, rowHeight * 0.58);
     const value = metric.value(datum);
@@ -271,6 +364,14 @@ function drawBarChart(data, metric) {
       "aria-label": `${datum.genre}: ${metric.detail(datum)}`,
     });
 
+    if (dividerIndex === -1) {
+      bar.style.fill = "var(--accent)";
+    } else if (index < dividerIndex) {
+      bar.style.fill = "var(--accent)";
+    } else {
+      bar.style.fill = "var(--red)";
+    }
+
     bar.addEventListener("mousemove", (event) => showTooltip(event, datum, metric));
     bar.addEventListener("mouseleave", () => {
       tooltip.hidden = true;
@@ -287,6 +388,7 @@ function drawBarChart(data, metric) {
       y: y + barHeight * 0.66,
     }, metric.format(value)));
   });
+
 }
 
 function showTooltip(event, datum, metric) {
